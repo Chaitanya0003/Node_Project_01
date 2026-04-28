@@ -1,0 +1,77 @@
+const express = require("express");
+const fs = require("node:fs");
+const users = require("./MOCK_DATA.json");
+
+const app = express();
+const Port = 8000;
+
+//Middleware
+app.use(express.urlencoded({ extended: false }));
+
+// user data in JSON
+app.get("/api/users", (req, res) => {
+  return res.json(users);
+});
+
+// user data in html doc
+app.get("/users", (req, res) => {
+  const html = `
+  <ul>
+  ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
+  </ul>
+  `;
+  return res.send(html);
+});
+
+app
+  .route("/api/users/:id")
+  .get((req, res) => {
+    return res.json(users.find((user) => user.id === Number(req.params.id)));
+  })
+  .patch((req, res) => {
+    //Edit user with ID
+    const body = req.body;
+    console.log("body", body);
+    const updatedUsers = users.map((user) => {
+      return user.id === Number(req.params.id)
+        ? { ...user, last_name: body.last_name }
+        : user;
+    });
+    fs.writeFile(
+      "./MOCK_DATA.json",
+      JSON.stringify(updatedUsers),
+      (err, data) => {
+        return res.json({ status: "success", id: req.params.id });
+      },
+    );
+  })
+  .delete((req, res) => {
+    //delete user with ID
+    let userList = JSON.parse(
+      fs.readFileSync("./MOCK_DATA.json", "utf-8", (err, data) => {}),
+    );
+    const updatedUsers = userList.filter(
+      (user) => user.id !== Number(req.params.id),
+    );
+    fs.writeFile(
+      "./MOCK_DATA.json",
+      JSON.stringify(updatedUsers),
+      (err, data) => {
+        return res.json({
+          status: "Successfully deleted user with id: " + req.params.id,
+        });
+      },
+    );
+  });
+
+//Create new user
+app.post("/api/users", (req, res) => {
+  const body = req.body;
+  console.log("body", body);
+  users.push({ ...body, id: users.length + 1 });
+  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+    return res.json({ status: "success", id: users.length });
+  });
+});
+
+app.listen(Port, () => console.log(`Served started on the Port: ${Port}`));
