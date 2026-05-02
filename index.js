@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // user data in JSON
 app.get("/api/users", (req, res) => {
+  console.log(req.headers);
+  res.setHeader("X-MyName", "Chaitanya");
   return res.json(users);
 });
 
