@@ -28,7 +28,12 @@ app.get("/users", (req, res) => {
 app
   .route("/api/users/:id")
   .get((req, res) => {
-    return res.json(users.find((user) => user.id === Number(req.params.id)));
+    const id = Number(req.params.id);
+    const user = users.find((user) => user.id === id);
+    if (!user) {
+      return res.status(404).json({ msg: "user not found." });
+    }
+    return res.json(user);
   })
   .patch((req, res) => {
     //Edit user with ID
@@ -70,9 +75,18 @@ app
 app.post("/api/users", (req, res) => {
   const body = req.body;
   console.log("body", body);
+  if (
+    !body ||
+    !body.first_name ||
+    !body.last_name ||
+    !body.email ||
+    !body.job_title
+  ) {
+    return res.status(400).json({ msg: "Missing required fields." });
+  }
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-    return res.json({ status: "success", id: users.length });
+    return res.status(201).json({ status: "success", id: users.length });
   });
 });
 

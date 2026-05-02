@@ -7998,35 +7998,5 @@
     "email": "wbouldingrr@meetup.com",
     "gender": "Female",
     "job_title": "Web Designer IV"
-  },
-  {
-    "first_name": "chaitanya",
-    "last_name": "tiwadi",
-    "email": "ct.dev@yopmail.com",
-    "gender": "Male",
-    "job_title": "Software dev"
-  },
-  {
-    "first_name": "chaitanya",
-    "last_name": "Doe",
-    "email": "ct.dev@yopmail.com",
-    "gender": "Male",
-    "job_title": "Software dev"
-  },
-  {
-    "first_name": "John ",
-    "last_name": "Frans",
-    "email": "ct.dev@yopmail.com",
-    "gender": "Male",
-    "job_title": "Software dev 1",
-    "id": 1004
-  },
-  {
-    "first_name": "John 1",
-    "last_name": "Doe1",
-    "email": "ct.dev@yopmail.com",
-    "gender": "Male",
-    "job_title": "Software dev 1",
-    "id": 1004
   }
 ]
