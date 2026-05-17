@@ -8,6 +8,27 @@ const Port = 8000;
 //Middleware
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  console.log("Hello from middleware 1");
+  req.myUserName = "Chaitanya Tiwadi";
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log("Hello from middleware 2", req.myUserName);
+  next();
+});
+
+app.use((req, res, next) => {
+  fs.appendFile(
+    "log.txt",
+    `${new Date()} - ${req.method} -${req.url}\n`,
+    (err, data) => {
+      next();
+    },
+  );
+});
+
 // user data in JSON
 app.get("/api/users", (req, res) => {
   console.log(req.headers);
